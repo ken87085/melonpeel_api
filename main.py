@@ -55,7 +55,7 @@ def format_post(post: dict) -> dict:
         "date": post["date"],
         "content": post["content"]["rendered"],
         "excerpt": post["excerpt"]["rendered"],
-        "cover_image": post.get("yoast_head_json", {}).get("og_image", [{}])[0].get("url", ""),
+        "cover_image": (post.get("_embedded") or {}).get("wp:featuredmedia", [{}])[0].get("source_url", ""),
         "categories": post.get("categories", []),
         "tags": post.get("tags", []),
     }
