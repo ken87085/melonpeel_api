@@ -22,6 +22,7 @@ HEADERS = {"User-Agent": "Mozilla/5.0"}
 SECRET_KEY = os.environ.get("SECRET_KEY", "change-this-secret")
 USERNAME = os.environ.get("API_USERNAME", "admin")
 PASSWORD = os.environ.get("API_PASSWORD", "changeme")
+print(f"[DEBUG] USERNAME={USERNAME}, PASSWORD={PASSWORD}")
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_MINUTES = 60
 
