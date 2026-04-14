@@ -47,6 +47,10 @@ def login(form: OAuth2PasswordRequestForm = Depends()):
     return {"access_token": create_token({"sub": form.username}), "token_type": "bearer"}
 
 
+def strip_tags(html: str) -> str:
+    import re
+    return re.sub(r'<[^>]+>', '', html).strip()
+
 def format_post(post: dict) -> dict:
     return {
         "id": post["id"],
@@ -54,7 +58,7 @@ def format_post(post: dict) -> dict:
         "title": post["title"]["rendered"],
         "date": post["date"],
         "content": post["content"]["rendered"],
-        "excerpt": post["excerpt"]["rendered"],
+        "excerpt": strip_tags(post["excerpt"]["rendered"]),
         "cover_image": (post.get("_embedded") or {}).get("wp:featuredmedia", [{}])[0].get("source_url", ""),
         "categories": post.get("categories", []),
         "tags": post.get("tags", []),
