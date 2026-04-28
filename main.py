@@ -49,7 +49,8 @@ def login(form: OAuth2PasswordRequestForm = Depends()):
 
 def strip_tags(html: str) -> str:
     import re
-    return re.sub(r'<[^>]+>', '', html).strip()
+    from html import unescape
+    return unescape(re.sub(r'<[^>]+>', '', html)).strip()
 
 def format_post(post: dict) -> dict:
     return {
