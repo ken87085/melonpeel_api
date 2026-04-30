@@ -18,6 +18,12 @@ app.add_middleware(
 
 BASE = "https://www.melonpeel.com.tw/wp-json/wp/v2"
 HEADERS = {"User-Agent": "Mozilla/5.0"}
+WP_UPLOADS = "https://www.melonpeel.com.tw/wp-content/uploads"
+LOCAL_IMAGES = "/images/web"
+
+
+def rewrite_img_urls(text: str) -> str:
+    return text.replace(WP_UPLOADS, LOCAL_IMAGES)
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "change-this-secret")
 USERNAME = os.environ.get("API_USERNAME", "admin")
@@ -58,9 +64,9 @@ def format_post(post: dict) -> dict:
         "url": post["link"],
         "title": post["title"]["rendered"],
         "date": post["date"],
-        "content": post["content"]["rendered"],
+        "content": rewrite_img_urls(post["content"]["rendered"]),
         "excerpt": strip_tags(post["excerpt"]["rendered"]),
-        "cover_image": (post.get("_embedded") or {}).get("wp:featuredmedia", [{}])[0].get("source_url", ""),
+        "cover_image": rewrite_img_urls((post.get("_embedded") or {}).get("wp:featuredmedia", [{}])[0].get("source_url", "")),
         "categories": post.get("categories", []),
         "tags": post.get("tags", []),
     }
